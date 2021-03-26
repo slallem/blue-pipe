@@ -20,7 +20,7 @@ pipeline {
         stage('prepare-build') {
             steps {
                 runSingleTask("npm config", 6)
-                runSingleTask("yarn install", 75)
+                runSingleTask("yarn install", 4)
                 runSingleTask("download locales", 2)
             }
         }
@@ -33,14 +33,14 @@ pipeline {
                         script {
                             parallel(
                                     "paralellized tests": {
-                                        runMultipleTasksParallel("Test", 3, 1500)
+                                        runMultipleTasksParallel("Test", 3, 15)
                                     },
                                     "paralellized lints": {
-                                        runMultipleTasksParallel("Lint", 3, 1500)
+                                        runMultipleTasksParallel("Lint", 3, 15)
                                     }
                             )
                         }
-                        runSingleTask("merge and upload reports", 30)
+                        runSingleTask("merge and upload reports", 5)
                     }
                 } // end of tests-way stage
                 stage('builds-line') {
@@ -49,30 +49,30 @@ pipeline {
                         script {
                             parallel(
                                     "Angular-builds": {
-                                        stage("nx print-affected all") { runSingleTask("nx print-affected --all", 5) }
-                                        stage("angular-builds") { runMultipleTasksParallel("angular-build", 3, 1200) }
+                                        stage("nx print-affected all") { runSingleTask("nx print-affected --all", 3) }
+                                        stage("angular-builds") { runMultipleTasksParallel("angular-build", 3, 12) }
                                     },
                                     "SSR-builds": {
-                                        stage("Dependencies Restore") { runSingleTask("dependencies restore", 8) }
-                                        stage("Build SSR") { runSingleTask("build SSR", 60) }
-                                        stage("Unit Tests") { runSingleTask("UT .net framework", 40) }
+                                        stage("Dependencies Restore") { runSingleTask("dependencies restore", 4) }
+                                        stage("Build SSR") { runSingleTask("build SSR", 4) }
+                                        stage("Unit Tests") { runSingleTask("UT .net framework", 4) }
                                     }
                             )
                         }
                         // 2 of 3 : At this point, both angular and SSR are built
-                        runSingleTask("Builds output aggregation", 10)
+                        runSingleTask("Builds output aggregation", 3)
                         // 3 of 3 : Finalization jobs : End to end tests, SSR local packaging, cleaning, bundle analysis
                         // Most can be run in parallel (E2E/.net/analysis)
                         script {
                             parallel(
                                     "E2E tests": {
-                                        runMultipleTasksParallel("E2E-Test", 3, 60)
+                                        runMultipleTasksParallel("E2E-Test", 3, 5)
                                     },
                                     "Bundle Analyzer": {
-                                        runMultipleTasksParallel("bundle-analysis", 3, 20)
+                                        runMultipleTasksParallel("bundle-analysis", 3, 6)
                                     },
                                     "Packaging and cleaning": {
-                                        runMultipleTasksParallel("publish-clean-package", 3, 10)
+                                        runMultipleTasksParallel("publish-clean-package", 3, 3)
                                     },
                             )
                         }
@@ -87,8 +87,8 @@ pipeline {
             steps {
                 script {
                     parallel(
-                            "Push-to-Octopus": { runSingleTask("Push to octopus", 30) },
-                            "Push-to-Nexus": { runSingleTask("Push to nexus", 15) },
+                            "Push-to-Octopus": { runSingleTask("Push to octopus", 3) },
+                            "Push-to-Nexus": { runSingleTask("Push to nexus", 2) },
                     )
                 }
             }
