@@ -96,17 +96,17 @@ pipeline {
 
     } // end of main "stages"
 
-    post {
-        always {
-            echo "Post : Always"
-        }
-        success {
-            echo "Post : Success"
-        }
-        failure {
-            echo "Post : Failure"
-        }
-    }
+//    post {
+//        always {
+//            echo "Post : Always"
+//        }
+//        success {
+//            echo "Post : Success"
+//        }
+//        failure {
+//            echo "Post : Failure"
+//        }
+//    }
 
 }
 
