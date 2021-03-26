@@ -4,12 +4,14 @@ pipeline {
 
     //see https://www.jenkins.io/doc/book/pipeline/syntax/#options
     options {
+        /*
         buildDiscarder(logRotator(numToKeepStr: '20'))
         disableConcurrentBuilds()
         disableResume()
         timeout(time: 1, unit: 'HOURS')
         skipDefaultCheckout()
         skipStagesAfterUnstable()
+         */
     }
 
     stages {
