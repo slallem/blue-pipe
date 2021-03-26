@@ -119,7 +119,7 @@ void runMultipleTasksParallel(String labelPrefix = "ParaStep", int nbSteps, int 
     def stepsToRun = [:]
     1.upto(nbSteps) { i ->
         def secondsToSleep = 1 + new Random().nextInt(maxDurationSeconds)
-        stepsToRun["${labelPrefix}-${i}"] = {
+        stepsToRun["zzz-${labelPrefix}-${i}"] = {
             //stage("${labelPrefix}-${i}") {
                 runSingleTask("Step number ${i} doing some stuff for ${secondsToSleep} seconds...", secondsToSleep)
            //
