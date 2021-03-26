@@ -10,7 +10,6 @@ pipeline {
         timeout(time: 1, unit: 'HOURS')
         skipDefaultCheckout()
         skipStagesAfterUnstable()
-        timestamps()
     }
 
     stages {
